@@ -12,7 +12,7 @@ return (
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mx">
-      <Nav.Link className={window.location.pathname=== '/'? 'active active-link': ''} onClick={() => props.history.push("/")}>Home</Nav.Link>
+      <Nav.Link className={window.location.pathname=== '/'? 'active active-link': ''} onClick={() => props.history.push("/")}>Homee</Nav.Link>
       <Nav.Link className={window.location.pathname=== '/books'? 'active active-link': ''} onClick={() => props.history.push("/books")}>Books</Nav.Link>
       <Nav.Link href="https://robertmsoriano.com" target="_blank">About</Nav.Link>
       <Nav.Link href="https://github.com/robertomsoriano/books-app" target="_blank">Github</Nav.Link>
