@@ -6,16 +6,13 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Swal from "sweetalert2";
 import { useCartDispatch, useCartState } from "./cartStore";
 
-
 const CartItems = props => {
   let books = props.products;
-  const dispatch = useCartDispatch()
+  const dispatch = useCartDispatch();
   const CartTotal = () => {
-    return useCartState().cartTotal
-  }
-  useEffect(() => {
-    
-  }, [books])
+    return useCartState().cartTotal;
+  };
+  useEffect(() => {}, [books]);
   const [stock, setStock] = useState(null);
   useEffect(() => {
     (async () => {
@@ -24,26 +21,24 @@ const CartItems = props => {
       setStock(data);
     })();
   }, []);
-// Remove Item from Cart
+  // Remove Item from Cart
   const handleDelete = (e, book) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you want to remove item from cart?",
-      type: 'warning',
+      type: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, remove it!'
-    }).then((result) => {
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!"
+    }).then(result => {
       if (result.value) {
         //TO DO
-        dispatch({type: 'removeCartItem', payload: book._id})
+        dispatch({ type: "removeCartItem", payload: book._id });
         // removeCartItem(book._id)
       }
-    })
+    });
   };
-
-
 
   return (
     <>
@@ -88,57 +83,71 @@ const CartItems = props => {
 
                           <td>
                             <div className="d-flex justify-content-center">
-                            <Link
-                              to={{
-                                pathname: `/cart`,
-                                state: { book }
-                              }}
-                            >
-                              <Button
-                                className="edit-btn"
-                                size="sm"
-                                outline
-                                onClick={e => {
-                                  if (book.quantity === 1) {
-                                    handleDelete(e, book);
-                                    return;
-                                  }
-                                  dispatch({type: 'decreaseQuantity', payload: book})
+                              <Link
+                                to={{
+                                  pathname: `/cart`,
+                                  state: { book }
                                 }}
-                                style={{ fontSize: "10px", margin: "4px" }}
                               >
-                                -
-                              </Button>
-                            </Link>
-                            {book.quantity}
-                            <Link
-                              to={{
-                                pathname: `/cart`,
-                                state: { book }
-                              }}
-                            >
-                              <Button
-                                className="edit-btn"
-                                outline
-                                size="sm"
-                                onClick={() => {
-                                  let inQuestion = stock.filter(item => item._id===book._id)
-                                  if((book.quantity + 1) > inQuestion[0].quantity){
-                                    return Swal.fire({
-                                      title: 'Could not add more books',
-                                      text: "There are not enough books in stock to complete your order",
-                                      type: 'error',
-                                      confirmButtonColor: '#3085d6',
-                                      footer: '<a href="/books">Check inventory</a>'
-                                    })
-                                  }
-                                  else{dispatch({type: 'increaseQuantity', payload: book})}
+                                <Button
+                                  className="edit-btn"
+                                  size="sm"
+                                  outline
+                                  onClick={e => {
+                                    if (book.quantity === 1) {
+                                      handleDelete(e, book);
+                                      return;
+                                    }
+                                    dispatch({
+                                      type: "decreaseQuantity",
+                                      payload: book
+                                    });
+                                  }}
+                                  style={{ fontSize: "10px", margin: "4px" }}
+                                >
+                                  -
+                                </Button>
+                              </Link>
+                              {book.quantity}
+                              <Link
+                                to={{
+                                  pathname: `/cart`,
+                                  state: { book }
                                 }}
-                                style={{ fontSize: "10px", margin: "4px" }}
                               >
-                                +
-                              </Button>
-                            </Link>
+                                <Button
+                                  className="edit-btn"
+                                  outline
+                                  size="sm"
+                                  onClick={() => {
+                                    let inQuestion = stock.filter(
+                                      item => item._id === book._id
+                                    );
+                                    if (
+                                      book.quantity + 1 >
+                                      inQuestion[0].quantity
+                                    ) {
+                                      return Swal.fire({
+                                        title: "Could not add more books",
+                                        text:
+                                          "There are not enough books in stock to complete your order",
+                                        type: "error",
+                                        confirmButtonColor: "#3085d6",
+                                        footer:
+                                          '<a href="/books">Check inventory</a>'
+                                      });
+                                    } else {
+                                      dispatch({
+                                        type: "increaseQuantity",
+                                        payload: book
+                                      });
+                                    }
+                                  }}
+                                  style={{ fontSize: "10px", margin: "4px" }}
+                                >
+                                  +
+                                </Button>
+                              </Link>
                             </div>
                             <br />
                             <Button
@@ -162,7 +171,7 @@ const CartItems = props => {
             </CSSTransition>
           </TransitionGroup>
         </ListGroup>
-        <ListGroupItem className="float-md-right">
+        <ListGroupItem className="float-md-right mb-4">
           Subtotal: <strong> ${CartTotal()}</strong> <br />
           <hr />
           {/* <Link
@@ -171,29 +180,34 @@ const CartItems = props => {
               state: { books }
             }}
           > */}
-            <Button style={{ textDecoration: "none" }} onClick={() => {
+          <Button
+            style={{ textDecoration: "none" }}
+            onClick={() => {
               Swal.fire({
-                title: 'Do you like what you see?',
+                title: "Do you like what you see?",
                 text: "Let's talk! Shoot me a message.",
-                type: 'question',
+                type: "question",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Go to Contact form',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Keep looking'
-                
-              }).then((result) => {
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Go to Contact form",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Keep looking"
+              }).then(result => {
                 if (result.value) {
                   //TO DO
-                  window.location.replace('https://robertmsoriano.com/#contact')
+                  window.location.replace(
+                    "https://robertmsoriano.com/#contact"
+                  );
                   // removeCartItem(book._id)
                 }
-              })
-            }}>
-              Proceed to Checkout
-            </Button>
+              });
+            }}
+          >
+            Proceed to Checkout
+          </Button>
           {/* </Link> */}
         </ListGroupItem>
+        <br />
         <ListGroupItem className="float-md-left">
           <Link to={"/books"}>
             <Button className="light-blue">Click here to keep shopping</Button>
