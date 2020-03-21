@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { useCartDispatch } from "../cart/cartStore";
-import { withRouter } from "react-router";
+import { withRouter, Redirect } from "react-router";
+// import { BOOKS_API } from "./BooksFunctions";
 
 const SingleBook = props => {
+  let itemState = props.location.state;
+
   const dispatch = useCartDispatch();
   const [bookQuantity, setBookQuantity] = useState(1);
   const [books, setBooks] = useState(null);
   const [success, setSuccess] = useState(null);
   useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `https://libreriabiblica.org/api/books/${props.match.params.id}`
-      );
-      const data = await res.json();
-      setBooks([data]);
-    })();
-  }, [props.match.params.id]);
+    if (itemState) {
+      (async () => {
+        // const res = await fetch(
+        //   `${BOOKS_API}/${props.location.state.item._id}`
+        //   // `https://libreriabiblica.org/api/books/${props.match.params.id}`
+        // );
+        // const data = await res.json();
+        const data = await itemState.item;
+        setBooks([data]);
+      })();
+    }
+  }, [itemState]);
 
+  //If user was not direct to single book page
+  if (!itemState) {
+    return <Redirect to="/" />;
+  }
   const handleQuantity = symb => {
     if (bookQuantity === 1 && symb === "-") return;
     if (symb === "-") {

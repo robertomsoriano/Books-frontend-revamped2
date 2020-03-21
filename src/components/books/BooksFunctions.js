@@ -33,3 +33,11 @@ export const getLSItems = key => {
   }
   return data.value;
 };
+
+export const formatURI = str => {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+  // return str.replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase()
+};

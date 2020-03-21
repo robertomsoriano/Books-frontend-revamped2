@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import AppNavbar from "./components/main/AppNavbar";
 import Conts from "./components/main/Conts";
 import MainSlide from "./components/main/MainSlide";
@@ -6,9 +6,10 @@ import MainSlide from "./components/main/MainSlide";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import TopSearch from "./components/main/TopSearch";
-import SingleBook from "./components/books/SingleBook";
+// import SingleBook from "./components/books/SingleBook";
 import Cart from "./components/cart/Cart";
 import { useCartState } from "./components/cart/cartStore";
+const SingleBook = React.lazy(() => import("./components/books/SingleBook"));
 
 function App() {
   // console.log(useCartState());
@@ -44,7 +45,14 @@ function App() {
               </div>
             )}
           />
-          <Route path="/books/:id" component={SingleBook} />
+          <Route
+            path="/books/:id"
+            render={() => (
+              <Suspense fallback={<div>Loading...</div>}>
+                <SingleBook />
+              </Suspense>
+            )}
+          />
           <Route path="/cart" component={Cart} />
         </Switch>
 

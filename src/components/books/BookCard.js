@@ -3,6 +3,7 @@ import { Button, Card, Image } from "semantic-ui-react";
 import { withRouter } from "react-router";
 import { useCartDispatch } from "../cart/cartStore";
 import Swal from "sweetalert2";
+import { formatURI } from "./BooksFunctions";
 const BookCard = props => {
   const dispatch = useCartDispatch();
   const [success, setSuccess] = useState(null);
@@ -19,16 +20,18 @@ const BookCard = props => {
     </>
   );
 
-  const addToCart = obj => {
-    if (obj.quanity > 0) {
-      dispatch({ type: "increaseQuantity", payload: obj });
-      handleSucess("positive");
+  const addToCart = async obj => {
+    if (obj.quantity > 0) {
+      await dispatch({ type: "increaseQuantity", payload: obj });
+      await handleSucess("positive");
+      return;
+    } else if (obj.quantity < 1) {
+      Swal.fire({
+        title: "This book is not available in our store",
+        text: "Contact us to make a special request",
+        type: "error"
+      });
     }
-    Swal.fire({
-      title: "This book is not available in our store",
-      text: "Contact us to make a special request",
-      type: "error"
-    });
   };
 
   const handleSucess = val => {
@@ -47,7 +50,7 @@ const BookCard = props => {
           style={styles}
           onClick={() =>
             props.history.push({
-              pathname: `/books/${props.id}`,
+              pathname: `/books/${formatURI(props.title)}`,
               state: { item: props.obj }
             })
           }
@@ -56,7 +59,7 @@ const BookCard = props => {
           style={styles}
           onClick={() =>
             props.history.push({
-              pathname: `/books/${props.id}`,
+              pathname: `/books/${formatURI(props.title)}`,
               state: { item: props.obj }
             })
           }

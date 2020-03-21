@@ -12,9 +12,14 @@ const initialState = { isLoading: false, results: [], value: "" };
 class SearchBar extends Component {
   state = initialState;
 
-  handleResultSelect = (e, { result }) => {this.props.history.push({pathname: `/books/${result._id}`})
-  this.setState({ isLoading: false, results: [], value: "" });}
-    // this.setState({ value: result.name, results: [result] });
+  handleResultSelect = (e, { result }) => {
+    this.props.history.push({
+      pathname: `/books/${result.name}`,
+      state: { item: result }
+    });
+    this.setState({ isLoading: false, results: [], value: "" });
+  };
+  // this.setState({ value: result.name, results: [result] });
 
   handleSearchChange = (e, { value }) => {
     this.setState({ isLoading: true, value });
@@ -38,7 +43,26 @@ class SearchBar extends Component {
       <Grid>
         <Grid.Column width={10}>
           <Search
-            input={{icon: value.length<=0?<Icon name='search'/>: <Icon className='search-icon' name='delete' link onClick={()=> this.setState({ isLoading: false, results: [], value: "" })}/>, iconPosition: 'left'}}
+            input={{
+              icon:
+                value.length <= 0 ? (
+                  <Icon name="search" />
+                ) : (
+                  <Icon
+                    className="search-icon"
+                    name="delete"
+                    link
+                    onClick={() =>
+                      this.setState({
+                        isLoading: false,
+                        results: [],
+                        value: ""
+                      })
+                    }
+                  />
+                ),
+              iconPosition: "left"
+            }}
             loading={isLoading}
             onResultSelect={this.handleResultSelect}
             onSearchChange={_.debounce(this.handleSearchChange, 500, {
@@ -59,7 +83,7 @@ export default withRouter(SearchBar);
 
 const resultRenderer = ({ pic, price, name, author }) => [
   pic && name && (
-    <div key="image" className="image" >
+    <div key="image" className="image">
       <img src={pic} key="img" alt={name} />
     </div>
   ),
