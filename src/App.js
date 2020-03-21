@@ -11,7 +11,7 @@ import Cart from "./components/cart/Cart";
 import { useCartState } from "./components/cart/cartStore";
 
 function App() {
-  console.log(useCartState());
+  // console.log(useCartState());
   return (
     <>
       <Router>

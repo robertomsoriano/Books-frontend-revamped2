@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 import Pagination from "./Pagination";
+import {
+  setWithExpiry,
+  getLSItems,
+  BOOKS_LS,
+  BOOKS_API
+} from "./BooksFunctions";
 
 const BooksList = props => {
   const [books, setBooks] = useState(null);
@@ -9,9 +15,21 @@ const BooksList = props => {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("https://libreriabiblica.org/api/books");
-      const data = await res.json();
-      setBooks(data);
+      // TODO
+      // Cache response in Local Storage and set Expiry Date
+      // If cache is expired then make API call.
+      if (getLSItems(BOOKS_LS)) {
+        let data = getLSItems(BOOKS_LS);
+        console.log("from cache");
+        setBooks(data);
+        return;
+      } else if (!getLSItems(BOOKS_LS)) {
+        console.log("from API");
+        const res = await fetch(BOOKS_API);
+        const data = await res.json();
+        setWithExpiry(BOOKS_LS, data);
+        setBooks(data);
+      }
     })();
   }, []);
 
@@ -30,7 +48,7 @@ const BooksList = props => {
       top: 0,
       behavior: "smooth"
     });
-   return window.scroll(0, 0);
+    return window.scroll(0, 0);
   };
   return (
     <>
@@ -56,7 +74,6 @@ const BooksList = props => {
             totalBooks={books.length}
             paginate={paginate}
           />
-
         </>
       )}
     </>
