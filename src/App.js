@@ -2,7 +2,7 @@ import React from "react";
 import AppNavbar from "./components/main/AppNavbar";
 import Conts from "./components/main/Conts";
 import MainSlide from "./components/main/MainSlide";
-import AppSidebar from "./components/main/AppSidebar";
+// import AppSidebar from "./components/main/AppSidebar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import TopSearch from "./components/main/TopSearch";
@@ -48,8 +48,8 @@ function App() {
           <Route path="/cart" component={Cart} />
         </Switch>
 
-        <footer id="sticky-footer" class="py-4 main-blue text-white-50">
-          <div class="container text-center">
+        <footer id="sticky-footer" className="py-4 main-blue text-white-50">
+          <div className="container text-center">
             <small>Copyright &copy; Roberto Soriano</small>
           </div>
         </footer>

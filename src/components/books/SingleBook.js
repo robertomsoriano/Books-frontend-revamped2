@@ -4,7 +4,7 @@ import { useCartDispatch } from "../cart/cartStore";
 import { withRouter } from "react-router";
 
 const SingleBook = props => {
-  const dispatch = useCartDispatch()
+  const dispatch = useCartDispatch();
   const [bookQuantity, setBookQuantity] = useState(1);
   const [books, setBooks] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -19,19 +19,23 @@ const SingleBook = props => {
   }, [props.match.params.id]);
 
   const handleQuantity = symb => {
-    if (bookQuantity === 1 && symb === "-") return
+    if (bookQuantity === 1 && symb === "-") return;
     if (symb === "-") {
       return setBookQuantity(bookQuantity => bookQuantity - 1);
     } else if (symb === "+") {
-      setSuccess('yellow')
-      setTimeout(()=>{ setSuccess(null); }, 800);
+      handleSucess("yellow");
+      setTimeout(() => {
+        setSuccess(null);
+      }, 800);
       return setBookQuantity(bookQuantity => bookQuantity + 1);
     }
   };
-  const handleSucess =() => {
-    setSuccess('positive')
-    setTimeout(()=>{ setSuccess(null); }, 800);
-  }
+  const handleSucess = val => {
+    setSuccess(val);
+    setTimeout(() => {
+      setSuccess(null);
+    }, 800);
+  };
 
   return (
     <div className="single-book-page container">
@@ -48,7 +52,9 @@ const SingleBook = props => {
                 width="100px"
                 height="100px"
               />
-              <h1>{item.name} | {item.author}</h1>
+              <h1>
+                {item.name} | {item.author}
+              </h1>
 
               <img
                 className="book-img"
@@ -59,7 +65,6 @@ const SingleBook = props => {
                 height="600px"
               />
               <div className="book-info">
-                
                 <>
                   <p>
                     {item.sale_price !== undefined &&
@@ -75,28 +80,44 @@ const SingleBook = props => {
                     )}
                   </p>
                 </>
-                <div className="quantities"> <Button
-                  className={`edit-btn`}
-                  size="small"
-                  outline="true"
-                  style={{ fontSize: "10px", margin: "4px" }}
-                  onClick={() => handleQuantity("-")}
-                >
-                  -
-                </Button>
-                {bookQuantity}
-                <Button
-                  className={`edit-btn`}
-                  outline="true"
-                  size="small"
-                  style={{ fontSize: "10px", margin: "4px" }}
-                  onClick={() => handleQuantity("+")}
-                >
-                  +
-                </Button>
+                <div className="quantities">
+                  {" "}
+                  <Button
+                    className={`edit-btn`}
+                    size="small"
+                    outline="true"
+                    style={{ fontSize: "10px", margin: "4px" }}
+                    onClick={() => handleQuantity("-")}
+                  >
+                    -
+                  </Button>
+                  {bookQuantity}
+                  <Button
+                    className={`edit-btn`}
+                    outline="true"
+                    size="small"
+                    style={{ fontSize: "10px", margin: "4px" }}
+                    onClick={() => handleQuantity("+")}
+                  >
+                    +
+                  </Button>
                 </div>
                 <br />
-                <Button fluid className={`add-to-cart-btn ${success}`} onClick={() => {dispatch({type: 'increaseQuantity', payload: item, quant: bookQuantity}); handleSucess()} }> Add to cart</Button>
+                <Button
+                  fluid
+                  className={`add-to-cart-btn ${success}`}
+                  onClick={() => {
+                    dispatch({
+                      type: "increaseQuantity",
+                      payload: item,
+                      quant: bookQuantity
+                    });
+                    handleSucess();
+                  }}
+                >
+                  {" "}
+                  Add to cart
+                </Button>
                 <h6>
                   <strong>Available for shipping or in-store pickup</strong>
                 </h6>
@@ -106,7 +127,16 @@ const SingleBook = props => {
           ))}
         </>
       )}
-      <div className="back-btn"><Button outline="true" style={{ fontSize: "12px", margin: "4px" }} className="mt-5" onClick={() => props.history.push("/")}><i className="fas fa-long-arrow-alt-left"></i> Back to Books List</Button></div>
+      <div className="back-btn">
+        <Button
+          outline="true"
+          style={{ fontSize: "12px", margin: "4px" }}
+          className="mt-5"
+          onClick={() => props.history.push("/")}
+        >
+          <i className="fas fa-long-arrow-alt-left" /> Back to Books List
+        </Button>
+      </div>
     </div>
   );
 };

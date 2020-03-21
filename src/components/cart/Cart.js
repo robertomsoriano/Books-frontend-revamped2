@@ -9,7 +9,7 @@ const Cart = props => {
   const products = useCartState().products;
 
   useEffect(() => {
-    console.log(products);
+    // console.log(products);
   }, [products]);
 
   return (

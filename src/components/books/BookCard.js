@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Card, Image } from "semantic-ui-react";
 import { withRouter } from "react-router";
 import { useCartDispatch } from "../cart/cartStore";
-
+import Swal from "sweetalert2";
 const BookCard = props => {
   const dispatch = useCartDispatch();
   const [success, setSuccess] = useState(null);
@@ -20,13 +20,23 @@ const BookCard = props => {
   );
 
   const addToCart = obj => {
-    dispatch({ type: "increaseQuantity", payload: obj });
+    if (obj.quanity > 0) {
+      dispatch({ type: "increaseQuantity", payload: obj });
+      handleSucess("positive");
+    }
+    Swal.fire({
+      title: "This book is not available in our store",
+      text: "Contact us to make a special request",
+      type: "error"
+    });
   };
 
-  const handleSucess =() => {
-    setSuccess('positive')
-    setTimeout(()=>{ setSuccess(null); }, 800);
-  }
+  const handleSucess = val => {
+    setSuccess(val);
+    setTimeout(() => {
+      setSuccess(null);
+    }, 800);
+  };
   return (
     <>
       <Card className="book-card">
@@ -51,14 +61,24 @@ const BookCard = props => {
             })
           }
         >
-          <Card.Header style={{whiteSpace: 'nowrap'}}>{props.title.substring(0, 25)}</Card.Header>
-          <Card.Description >{price}</Card.Description>
+          <Card.Header style={{ whiteSpace: "nowrap" }}>
+            {props.title.substring(0, 25)}
+          </Card.Header>
+          <Card.Description>{price}</Card.Description>
           <Card.Description style={{ fontSize: "14px" }}>
             {props.author}
           </Card.Description>
         </Card.Content>
-        <Card.Content >
-          <Button className={`add-to-cart-btn ${success}`}  onClick={() => {addToCart(props.obj); handleSucess()}}>Add to cart</Button>
+        <Card.Content>
+          <Button
+            className={`add-to-cart-btn ${success}`}
+            onClick={() => {
+              addToCart(props.obj);
+              handleSucess();
+            }}
+          >
+            Add to cart
+          </Button>
         </Card.Content>
       </Card>
     </>
